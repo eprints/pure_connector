@@ -370,7 +370,10 @@ sub serve_documents_get
 
 	# Create document path
 	my $path = $document->local_path."/".$filename;
-	
+	$path =~ s/'/=0027/g; # apostrophes are encoded
+	$path =~ s/:/=003a/g; # colons are encoded
+	$path =~ s!/\.!/_!g; # files cannot be hidden
+
 	# And send file
 	$util->{request}->content_type($document->get_value("format"));
 	$util->{request}->headers_out->{'Content-Length'} = $files{$filename}; 
